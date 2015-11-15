@@ -1,0 +1,9 @@
+{
+  "firebase": "fb-test321",
+  "public": "target/cljsbuild/public",
+  "ignore": [
+    "firebase.json",
+    "**/.*",
+    "**/node_modules/**"
+  ]
+}
