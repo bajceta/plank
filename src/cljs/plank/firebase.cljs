@@ -10,9 +10,11 @@
 (def auth-data (atom nil))
 
 (defn init-user-data []
-  (reset! user {:name (:displayName (:google @auth-data))
-                        :planks [] })
-  (.set @user-ref (clj->js @user))
+  (if @auth-data
+    (do 
+      (reset! user {:name (:displayName (get @auth-data :google))
+                    :planks [] })
+      (.set @user-ref (clj->js @user))))
   (println @user)
   (println "init-user-data"))
 

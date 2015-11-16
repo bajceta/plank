@@ -18,7 +18,7 @@
                  [org.clojure/clojurescript "1.7.145" :scope "provided"]
                  [secretary "1.2.3"]
                  [venantius/accountant "0.1.4"]
-                 
+
                  ]
 
   :plugins [[lein-environ "1.0.1"]
@@ -43,48 +43,57 @@
 
   :minify-assets
   {:assets
-    {"resources/public/css/site.min.css" "resources/public/css/site.css"}}
+   {"resources/public/css/site.min.css" "resources/public/css/site.css"}}
 
   :cljsbuild {:builds {:app {:source-paths ["src/cljs" "src/cljc"]
                              :compiler {:output-to "target/cljsbuild/public/js/app.js"
                                         :output-dir "target/cljsbuild/public/js/out"
                                         :asset-path   "js/out"
                                         :optimizations :none
-                                        :pretty-print  true}}}}
+                                        :pretty-print  true}}
+                       :prod {:source-paths ["env/prod/cljs" "src/cljs"]
+                                 :compiler {
+                                            :main "plank.prod"
+                                            :output-to "target/cljsbuild/public/js/app_prod.js"
+                                            :output-dir "target/cljsbuild/public/js/out_prod"
+                                            :asset-path   "js/out_prod"
+                                            :optimizations :none
+                                            :pretty-print false }}
+                       }}
 
   :profiles { :dev {:repl-options {:init-ns plank.repl}
 
-                   :dependencies [[ring/ring-mock "0.3.0"]
-                                  [ring/ring-devel "1.4.0"]
-                                  [lein-figwheel "0.4.1"]
-                                  [org.clojure/tools.nrepl "0.2.12"]
-                                  [com.cemerick/piggieback "0.1.5"]
-                                  [pjstadig/humane-test-output "0.7.0"]]
+                    :dependencies [[ring/ring-mock "0.3.0"]
+                                   [ring/ring-devel "1.4.0"]
+                                   [lein-figwheel "0.4.1"]
+                                   [org.clojure/tools.nrepl "0.2.12"]
+                                   [com.cemerick/piggieback "0.1.5"]
+                                   [pjstadig/humane-test-output "0.7.0"]]
 
-                   :source-paths ["env/dev/clj"]
-                   :plugins [[lein-figwheel "0.4.1"] ]
+                    :source-paths ["env/dev/clj"]
+                    :plugins [[lein-figwheel "0.4.1"] ]
 
-                   :injections [(require 'pjstadig.humane-test-output)
-                                (pjstadig.humane-test-output/activate!)]
+                    :injections [(require 'pjstadig.humane-test-output)
+                                 (pjstadig.humane-test-output/activate!)]
 
-                   :figwheel {:http-server-root "public"
-                              :server-port 3449
-                              :nrepl-port 7002
-                              :nrepl-middleware ["cemerick.piggieback/wrap-cljs-repl"
-                                                 ]
-                              :css-dirs ["resources/public/css"]
-                              :ring-handler plank.handler/app}
+                    :figwheel {:http-server-root "public"
+                               :server-port 3449
+                               :nrepl-port 7002
+                               :nrepl-middleware ["cemerick.piggieback/wrap-cljs-repl"
+                                                  ]
+                               :css-dirs ["resources/public/css"]
+                               :ring-handler plank.handler/app}
 
-                   :env {:dev true}
+                    :env {:dev true}
 
-                   :cljsbuild {:builds {:app {:source-paths ["env/dev/cljs"]
-                                              :compiler {:main "plank.dev"
-                                                         :source-map true}}
+                    :cljsbuild {:builds {:app {:source-paths ["env/dev/cljs"]
+                                               :compiler {:main "plank.dev"
+                                                          :source-map true}}
 
 
-                                        }
+                                         }
 
-                               }}
+                                }}
 
              :uberjar {:hooks [minify-assets.plugin/hooks]
                        :prep-tasks ["compile" ["cljsbuild" "once"]]
@@ -93,7 +102,7 @@
                        :omit-source true
                        :cljsbuild {:jar true
                                    :builds {:app
-                                             {:source-paths ["env/prod/cljs"]
-                                              :compiler
-                                              {:optimizations :advanced
-                                               :pretty-print false}}}}}})
+                                            {:source-paths ["env/prod/cljs"]
+                                             :compiler
+                                             {:optimizations :advanced
+                                              :pretty-print false}}}}}})
